@@ -1,3 +1,0 @@
-C:/Users/Lars/Desktop/cpp audio devices/cmake-build-debug/CMakeFiles/cpp_audio_devices.dir
-C:/Users/Lars/Desktop/cpp audio devices/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Lars/Desktop/cpp audio devices/cmake-build-debug/CMakeFiles/rebuild_cache.dir

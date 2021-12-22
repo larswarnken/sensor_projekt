@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Lars/Desktop/cpp audio devices/cmake-build-debug",
-		"source" : "C:/Users/Lars/Desktop/cpp audio devices"
+		"build" : "D:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt/cmake-build-debug",
+		"source" : "D:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt"
 	},
 	"version" : 
 	{

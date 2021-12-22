@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/Lars/Desktop/cpp audio devices/cmake-build-debug"
+			"value" : "d:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -623,7 +623,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/Lars/Desktop/cpp audio devices"
+			"value" : "D:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1239,7 +1239,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Lars/Desktop/cpp audio devices/cmake-build-debug"
+			"value" : "D:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt/cmake-build-debug"
 		},
 		{
 			"name" : "cpp_audio_devices_IS_TOP_LEVEL",
@@ -1263,7 +1263,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Lars/Desktop/cpp audio devices"
+			"value" : "D:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt"
 		}
 	],
 	"kind" : "cache",

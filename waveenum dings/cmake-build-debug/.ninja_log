@@ -1,0 +1,6 @@
+# ninja log v5
+3	2667	6613670345682871	CMakeFiles/cpp_audio_devices.dir/main.cpp.obj	d600905c182321e5
+2667	3717	6613670356215250	cpp_audio_devices.exe	dc8954f8eed5ae38
+1	168	6613677247036127	build.ninja	13e524def554aa5e
+3	2657	6613677368603576	CMakeFiles/cpp_audio_devices.dir/main.cpp.obj	125d0aa8ed708cbc
+2657	3696	6613677379001197	cpp_audio_devices.exe	dc8954f8eed5ae38
