@@ -1,0 +1,3 @@
+g++ -Wall -D__WINDOWS_DS__ -o main main.cpp RtAudio.cpp -lole32 -lwinmm -ldsound
+
+g++ -Wall -D__WINDOWS_WASAPI__ -Iinclude -o main main.cpp RtAudio.cpp -lole32 -lwinmm -lksuser -lmfplat -lmfuuid -lwmcodecdspuuid
