@@ -1,0 +1,8 @@
+{
+	"recordDevice": 9,
+	"inputChannels": 1,
+	"firstChannel": 0,
+	"sampleRate": 9600,
+	"bufferFrames": 256,
+	"recordTime": 2000
+}
