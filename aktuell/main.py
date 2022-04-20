@@ -168,34 +168,28 @@ frame.pack(expand=True)
 
 filename_plot_label = tk.Label(tab2, textvariable=data_filename_label, bg="white")
 
-loaded_data2 = [1,2,3,4,5,5]
+loaded_data2 = [1,2,3,4,5]
+loaded_data3 = [5,4,3,2,1]
 
 
-show_plot_1 = IntVar(value=1)
-show_plot_2 = IntVar()
+show_plot_var = IntVar(value=1)
 
 
 def ticked():
+    print(show_plot_var.get())
+
     figure_plots.clear()
+    subplot = figure_plots.add_subplot(1, 1, 1)
 
-    if show_plot_1.get() == 0 and show_plot_2.get() == 0:
-        figure_plots.clear()
-
-    elif show_plot_1.get() == 1 and show_plot_2.get() == 1:
-        subplot = figure_plots.add_subplot(2, 1, 1)
-        subplot.plot(loaded_data)
-        subplot = figure_plots.add_subplot(2, 1, 2)
-        subplot.plot(loaded_data2)
-
-    elif show_plot_1.get() == 1 and show_plot_2.get() == 0:
-
-        subplot = figure_plots.add_subplot(1, 1, 1)
+    if show_plot_var.get() == 1:
         subplot.plot(loaded_data)
         subplot.set_xlabel("time")
-
-    elif show_plot_1.get() == 0 and show_plot_2.get() == 1:
-        subplot = figure_plots.add_subplot(1, 1, 1)
+    elif show_plot_var.get() == 2:
         subplot.plot(loaded_data2)
+        subplot.set_xlabel("time")
+    elif show_plot_var.get() == 3:
+        subplot.plot(loaded_data3)
+        subplot.set_xlabel("time")
 
     canvas_plots.draw()
 
@@ -211,8 +205,9 @@ def refresh_plot():
 
 # plot checkbuttons
 checkbox_frame = Frame(tab2)
-plot_1_checkbutton = Checkbutton(checkbox_frame, text="plot one", variable=show_plot_1, command=ticked, bg="white")
-plot_2_checkbutton = Checkbutton(checkbox_frame, text="plot two", variable=show_plot_2, command=ticked, bg="white")
+plot_1_checkbutton = Radiobutton(checkbox_frame, text="plot one", variable=show_plot_var, value=1,  command=ticked, bg="white")
+plot_2_checkbutton = Radiobutton(checkbox_frame, text="plot two", variable=show_plot_var, value=2, command=ticked, bg="white")
+plot_3_checkbutton = Radiobutton(checkbox_frame, text="plot two", variable=show_plot_var, value=3, command=ticked, bg="white")
 
 
 figure_plots = Figure(dpi=100)
@@ -232,6 +227,7 @@ checkbox_frame.pack()
 
 plot_1_checkbutton.grid(row=0, column=0)
 plot_2_checkbutton.grid(row=0, column=1)
+plot_3_checkbutton.grid(row=0, column=2)
 
 canvas_plots.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
