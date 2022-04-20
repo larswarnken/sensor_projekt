@@ -132,7 +132,7 @@ def new_recording_thread():
 # opens file browser, sets new data file name and loads its content
 def browse_files():
     global data_filename_var
-    data_filename_var = filedialog.askopenfilename(initialdir=os.getcwd(),
+    data_filename_var = filedialog.askopenfilename(initialdir=f'{os.getcwd()}/Aufnahmen',
                                                    title="Select a File",
                                                    filetypes=(("Text files", "*.txt"),
                                                               ("all files", "*.*")))
