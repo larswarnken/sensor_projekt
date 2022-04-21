@@ -85,7 +85,6 @@ def check_if_recording():
     # gets recently created file
     with open('test.json', 'r') as f:
         output_path = json.load(f)
-
     data_filename_var = os.path.join(os.path.dirname(__file__), output_path["outputPath"].replace("/", "\\"))
 
     # checks if recording has started
@@ -180,6 +179,13 @@ filename_plot_label = tk.Label(tab2, textvariable=data_filename_label, bg="white
 loaded_data2 = [1,2,3,4,5]
 loaded_data3 = [5,4,3,2,1]
 
+bigframe = Frame(tab2, bg='white')
+
+plot_frame = Frame(bigframe)
+data_frame = Frame(bigframe, width=1000)
+
+label_test = tk.Label(data_frame, text="hi")
+
 
 show_plot_var = IntVar(value=1)
 
@@ -205,12 +211,12 @@ def ticked():
 checkbox_frame = Frame(tab2)
 plot_1_checkbutton = Radiobutton(checkbox_frame, text="plot one", variable=show_plot_var, value=1,  command=ticked, bg="white")
 plot_2_checkbutton = Radiobutton(checkbox_frame, text="plot two", variable=show_plot_var, value=2, command=ticked, bg="white")
-plot_3_checkbutton = Radiobutton(checkbox_frame, text="plot two", variable=show_plot_var, value=3, command=ticked, bg="white")
+plot_3_checkbutton = Radiobutton(checkbox_frame, text="plot three", variable=show_plot_var, value=3, command=ticked, bg="white")
 
 
 figure_plots = Figure(dpi=100)
 
-canvas_plots = FigureCanvasTkAgg(figure_plots, master=tab2)
+canvas_plots = FigureCanvasTkAgg(figure_plots, master=plot_frame)
 canvas_plots.draw()
 
 # toolbar for matplotlib
@@ -222,6 +228,16 @@ toolbar.update()
 filename_plot_label.pack()
 
 checkbox_frame.pack()
+
+bigframe.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+bigframe.columnconfigure(0, weight=1)
+bigframe.rowconfigure(0, weight=1)
+
+plot_frame.grid(row=0, column=0, sticky='news')
+data_frame.grid(row=0, column=1)
+
+label_test.pack()
 
 plot_1_checkbutton.grid(row=0, column=0)
 plot_2_checkbutton.grid(row=0, column=1)
