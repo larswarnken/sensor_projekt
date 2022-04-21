@@ -175,32 +175,21 @@ loaded_data3 = [5,4,3,2,1]
 show_plot_var = IntVar(value=1)
 
 
-def ticked():
-    print(show_plot_var.get())
-
-    figure_plots.clear()
-    subplot = figure_plots.add_subplot(1, 1, 1)
-
-    if show_plot_var.get() == 1:
-        subplot.plot(loaded_data)
-        subplot.set_xlabel("time")
-    elif show_plot_var.get() == 2:
-        subplot.plot(loaded_data2)
-        subplot.set_xlabel("time")
-    elif show_plot_var.get() == 3:
-        subplot.plot(loaded_data3)
-        subplot.set_xlabel("time")
-
-    canvas_plots.draw()
-
-
-# shows only time plot when plot tab is opened
-def refresh_plot():
+def plot_time():
     figure_plots.clear()
     subplot = figure_plots.add_subplot(1, 1, 1)
     subplot.plot(loaded_data)
     subplot.set_xlabel("time")
     canvas_plots.draw()
+
+
+def ticked():
+    if show_plot_var.get() == 1:
+        plot_time()
+    elif show_plot_var.get() == 2:
+        return
+    elif show_plot_var.get() == 3:
+        return
 
 
 # plot checkbuttons
@@ -283,7 +272,7 @@ def tab_switched(*args):
     if tabControl.index(tabControl.select()) == 0:
         return
     elif tabControl.index(tabControl.select()) == 1:
-        refresh_plot()
+        plot_time()
     elif tabControl.index(tabControl.select()) == 2:
         liveplot()
 
