@@ -48,6 +48,8 @@ data_filename_label.set("None")
 data_filename_var = "None"
 
 loaded_data = []
+loaded_sample_rate = 0
+loaded_record_time = 0
 
 currently_recording = False
 
@@ -55,11 +57,18 @@ currently_recording = False
 # functions ------------------------------------------------------
 
 def load_data():
+    global loaded_sample_rate
+    global loaded_record_time
+    global loaded_data
     # reads data from file
     with open(data_filename_var, 'r') as file:
         details = file.read()
         x = details.split('\n')
-
+    # saves info from first line
+    loaded_sample_rate = x[0].split(", ")[0]
+    loaded_record_time = x[0].split(", ")[1]
+    # delete first line which is samppe rate and time
+    x.pop(0)
     # adds data to list
     global loaded_data
     loaded_data = []
