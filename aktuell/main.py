@@ -11,6 +11,12 @@ import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import re
+import numpy as np
+
+from scipy import signal
+from scipy.fft import fftfreq
+from scipy.fft import fft, ifft, fft2, ifft2
+import pywt
 
 
 # gui ------------------------------------------------------------
@@ -65,8 +71,8 @@ def load_data():
         details = file.read()
         x = details.split('\n')
     # saves info from first line
-    loaded_sample_rate = x[0].split(", ")[0]
-    loaded_record_time = x[0].split(", ")[1]
+    loaded_sample_rate = int(x[0].split(", ")[0])
+    loaded_record_time = int(x[0].split(", ")[1])
     # delete first line which is samppe rate and time
     x.pop(0)
     # adds data to list
@@ -205,6 +211,42 @@ label_test_value8 = tk.Label(data_frame, text='test')
 show_plot_var = IntVar(value=1)
 
 
+def refresh_facts():
+    label_test_value.configure(text=f'{loaded_record_time} ms')
+    label_test_value2.configure(text=f'{loaded_sample_rate}')
+
+    time = []
+    max_data = max(loaded_data)
+    min_data = min(loaded_data)
+
+    # Construct a time signal
+    fs = loaded_sample_rate  # Sampling freq
+    tstep = 1 / fs  # sample time interval
+
+    for x in range(len(loaded_data)):
+        time.append(x * tstep)
+
+    # merkmale Zeitbereich 1. max. Amplitude
+    max_amplitude = (max(abs(i) for i in loaded_data))
+    if abs(max_data) > abs(min_data):
+        m_t_idx = loaded_data.index(max_data)
+    else:
+        m_t_idx = loaded_data.index(min_data)
+
+    label_test_value3.configure(text=f'{max_amplitude}')
+    label_test_value4.configure(text=f'{time[m_t_idx]}')
+
+    average = sum(loaded_data) / len(loaded_data)
+
+    rms = np.sqrt(average ** 2)
+
+    label_test_value5.configure(text=f'{rms}')
+
+    # merkmale Zeitbereich 3. Signalenergie
+    sig_energie = sum(abs(i) for i in loaded_data)
+    label_test_value6.configure(text=f'{sig_energie}')
+
+
 def plot_time():
     figure_plots.clear()
     subplot = figure_plots.add_subplot(1, 1, 1)
@@ -213,11 +255,58 @@ def plot_time():
     canvas_plots.draw()
 
 
+def other_plot():
+    if len(loaded_data) != 0:
+        time = []
+
+        # Construct a time signal
+        fs = loaded_sample_rate  # Sampling freq
+        tstep = 1 / fs  # sample time interval
+
+        for x in range(len(loaded_data)):
+            time.append(x * tstep)
+
+        time_interval = len(time) * tstep
+
+        # perform fft
+        t = time_interval  # entire time
+        n = len(loaded_data)
+        t = np.linspace(0, t, n)
+        dt = np.diff(t)[0]
+
+        f = fftfreq(len(t), np.diff(t)[0])
+        # fftfreq: Calculate the frequencies corresponding to
+        # the FFT bins in the result returned by fft.
+        y_fft = fft(loaded_data)
+
+        figure_plots.clear()
+        subplot = figure_plots.add_subplot(1, 1, 1)
+        subplot.plot(f[:n//2], np.abs(y_fft[:n//2]))
+        subplot.set_xlim(0, fs/2)
+        subplot.set_xlabel("Frequency (Hz)")
+        subplot.set_ylabel("Amplitude")
+        canvas_plots.draw()
+    else:
+        figure_plots.clear()
+        subplot = figure_plots.add_subplot(1, 1, 1)
+        subplot.set_xlabel("Frequency (Hz)")
+        subplot.set_ylabel("Amplitude")
+        canvas_plots.draw()
+
+
+
+
+
+
+
+
+
+
 def ticked():
     if show_plot_var.get() == 1:
         plot_time()
     elif show_plot_var.get() == 2:
-        return
+        other_plot()
     elif show_plot_var.get() == 3:
         return
 
@@ -328,6 +417,12 @@ def tab_switched(*args):
         return
     elif tabControl.index(tabControl.select()) == 1:
         plot_time()
+
+        if len(loaded_data) != 0:
+            refresh_facts()
+
+
+
     elif tabControl.index(tabControl.select()) == 2:
         liveplot()
 
