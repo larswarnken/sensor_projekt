@@ -191,21 +191,21 @@ plot_frame = Frame(bigframe)
 data_frame = Frame(bigframe, width=1000)
 
 label_test = tk.Label(data_frame, text="Recording Time: ")
-label_test_value = tk.Label(data_frame, text='test')
+label_test_value = tk.Label(data_frame, text='-')
 label_test2 = tk.Label(data_frame, text="Sample Rate: ")
-label_test_value2 = tk.Label(data_frame, text='test')
+label_test_value2 = tk.Label(data_frame, text='-')
 label_test3 = tk.Label(data_frame, text="max Amplitude: ")
-label_test_value3 = tk.Label(data_frame, text='test')
+label_test_value3 = tk.Label(data_frame, text='-')
 label_test4 = tk.Label(data_frame, text="max Amplitude Time: ")
-label_test_value4 = tk.Label(data_frame, text='test')
+label_test_value4 = tk.Label(data_frame, text='-')
 label_test5 = tk.Label(data_frame, text="RMS: ")
-label_test_value5 = tk.Label(data_frame, text='test')
+label_test_value5 = tk.Label(data_frame, text='-')
 label_test6 = tk.Label(data_frame, text="Signalenergie: ")
-label_test_value6 = tk.Label(data_frame, text='test')
+label_test_value6 = tk.Label(data_frame, text='-')
 label_test7 = tk.Label(data_frame, text="max Amplitude FFT: ")
-label_test_value7 = tk.Label(data_frame, text='test')
+label_test_value7 = tk.Label(data_frame, text='-')
 label_test8 = tk.Label(data_frame, text="max Amplitude Frequenz: ")
-label_test_value8 = tk.Label(data_frame, text='test')
+label_test_value8 = tk.Label(data_frame, text='-')
 
 
 show_plot_var = IntVar(value=1)
@@ -246,6 +246,9 @@ def refresh_facts():
     sig_energie = sum(abs(i) for i in loaded_data)
     label_test_value6.configure(text=f'{sig_energie}')
 
+    label_test_value7.configure(text='-')
+    label_test_value8.configure(text='-')
+
 
 def plot_time():
     figure_plots.clear()
@@ -255,7 +258,7 @@ def plot_time():
     canvas_plots.draw()
 
 
-def other_plot():
+def plot_fft():
     if len(loaded_data) != 0:
         time = []
 
@@ -286,6 +289,17 @@ def other_plot():
         subplot.set_xlabel("Frequency (Hz)")
         subplot.set_ylabel("Amplitude")
         canvas_plots.draw()
+
+        # zuerst die idx von max. Amplitude in y_FFT zu finden
+        m_fft_idx = 0
+        max_amplitude = 0
+        for currtFFT in y_fft:
+            if np.abs(currtFFT) > max_amplitude:
+                m_fft_idx = np.where(y_fft == currtFFT)[0][0]
+                max_amplitude = np.abs(currtFFT)
+
+        label_test_value7.configure(text=f'{max_amplitude}')
+        label_test_value8.configure(text=f'{f[:n // 2][m_fft_idx]}')
     else:
         figure_plots.clear()
         subplot = figure_plots.add_subplot(1, 1, 1)
@@ -294,21 +308,17 @@ def other_plot():
         canvas_plots.draw()
 
 
-
-
-
-
-
-
-
-
 def ticked():
     if show_plot_var.get() == 1:
         plot_time()
     elif show_plot_var.get() == 2:
-        other_plot()
+        plot_fft()
     elif show_plot_var.get() == 3:
         return
+
+
+def radio_default():
+    show_plot_var.set(1)
 
 
 # plot checkbuttons
@@ -416,6 +426,8 @@ def tab_switched(*args):
     if tabControl.index(tabControl.select()) == 0:
         return
     elif tabControl.index(tabControl.select()) == 1:
+        radio_default()
+
         plot_time()
 
         if len(loaded_data) != 0:
