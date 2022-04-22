@@ -17,6 +17,7 @@ from scipy import signal
 from scipy.fft import fftfreq
 from scipy.fft import fft, ifft, fft2, ifft2
 import pywt
+import matplotlib.pyplot as plt
 
 
 # gui ------------------------------------------------------------
@@ -254,7 +255,8 @@ def plot_time():
     figure_plots.clear()
     subplot = figure_plots.add_subplot(1, 1, 1)
     subplot.plot(loaded_data)
-    subplot.set_xlabel("time")
+    subplot.set_xlabel("Time")
+    subplot.set_ylabel("Amplitude")
     canvas_plots.draw()
 
 
@@ -308,13 +310,63 @@ def plot_fft():
         canvas_plots.draw()
 
 
+def plot_spectogram():
+    Fs = loaded_sample_rate
+    N = int(Fs / 150.0)  # 1/100 a second
+    f = fftfreq(N, 1.0 / Fs)
+    t = np.linspace(0, 0.1, N)
+    mask = (f > 0) * (f < Fs / 2)
+
+    subdata = loaded_data[:N]
+    F = fft(subdata)
+
+    n_max = int(len(loaded_data) / N)
+
+    f_values = np.sum(mask)
+
+    spectorgram_data = np.zeros((n_max, f_values))
+
+    window = signal.blackman(len(subdata))
+
+    for n in range(0, n_max):
+        subdata = loaded_data[(N * n):(N * (n + 1))]
+        F = fft(subdata * window)
+        spectorgram_data[n, :] = np.log(abs(F[mask]))
+
+    spectorgram_data_T = spectorgram_data.T
+    # Transposed matrix
+
+    fig, axes = plt.subplots(1, 1, figsize=(8, 6))
+    p = axes.imshow(spectorgram_data_T, origin='lower',
+                    extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
+                    aspect='auto',
+                    cmap=matplotlib.cm.RdBu_r)
+    cb = fig.colorbar(p, ax=axes)
+    cb.set_label("$\log|F|$", fontsize=16)
+    axes.set_xlabel("time (s)", fontsize=14)
+    axes.set_ylabel("Frequency (Hz)", fontsize=14)
+    fig.tight_layout()
+
+    plt.show()
+
+    # figure_plots.clear()
+    # subplot = figure_plots.add_subplot(1, 1, 1)
+    #
+    # subplot.set_xlabel("Frequency (Hz)")
+    # subplot.set_ylabel("Amplitude")
+    # canvas_plots.draw()
+
+
+
+
+
 def ticked():
     if show_plot_var.get() == 1:
         plot_time()
     elif show_plot_var.get() == 2:
         plot_fft()
     elif show_plot_var.get() == 3:
-        return
+        plot_spectogram()
 
 
 def radio_default():
@@ -323,9 +375,9 @@ def radio_default():
 
 # plot checkbuttons
 checkbox_frame = Frame(tab2)
-plot_1_checkbutton = Radiobutton(checkbox_frame, text="plot one", variable=show_plot_var, value=1,  command=ticked, bg="white")
-plot_2_checkbutton = Radiobutton(checkbox_frame, text="plot two", variable=show_plot_var, value=2, command=ticked, bg="white")
-plot_3_checkbutton = Radiobutton(checkbox_frame, text="plot three", variable=show_plot_var, value=3, command=ticked, bg="white")
+plot_1_checkbutton = Radiobutton(checkbox_frame, text="Time Plot", variable=show_plot_var, value=1,  command=ticked, bg="white")
+plot_2_checkbutton = Radiobutton(checkbox_frame, text="FFT Plot", variable=show_plot_var, value=2, command=ticked, bg="white")
+plot_3_checkbutton = Radiobutton(checkbox_frame, text="Spectrogram", variable=show_plot_var, value=3, command=ticked, bg="white")
 
 
 figure_plots = Figure(dpi=100)
