@@ -71,17 +71,20 @@ def load_data():
     with open(data_filename_var, 'r') as file:
         details = file.read()
         x = details.split('\n')
-    # saves info from first line
-    loaded_sample_rate = int(x[0].split(", ")[0])
-    loaded_record_time = int(x[0].split(", ")[1])
-    # delete first line which is samppe rate and time
-    x.pop(0)
-    # adds data to list
-    global loaded_data
-    loaded_data = []
-    for i in x:
-        if i != '':
-            loaded_data.append(float(i))
+    try:
+        # saves info from first line
+        loaded_sample_rate = int(x[0].split(", ")[0])
+        loaded_record_time = int(x[0].split(", ")[1])
+        # delete first line which is samppe rate and time
+        x.pop(0)
+        # adds data to list
+        global loaded_data
+        loaded_data = []
+        for i in x:
+            if i != '':
+                loaded_data.append(float(i))
+    except:
+        print("idk")
 
 
 def check_if_recording():
@@ -311,50 +314,69 @@ def plot_fft():
 
 
 def plot_spectogram():
-    Fs = loaded_sample_rate
-    N = int(Fs / 150.0)  # 1/100 a second
-    f = fftfreq(N, 1.0 / Fs)
-    t = np.linspace(0, 0.1, N)
-    mask = (f > 0) * (f < Fs / 2)
+    if len(loaded_data) != 0:
+        Fs = loaded_sample_rate
+        N = int(Fs / 150.0)  # 1/100 a second
+        f = fftfreq(N, 1.0 / Fs)
+        t = np.linspace(0, 0.1, N)
+        mask = (f > 0) * (f < Fs / 2)
 
-    subdata = loaded_data[:N]
-    F = fft(subdata)
+        subdata = loaded_data[:N]
+        F = fft(subdata)
 
-    n_max = int(len(loaded_data) / N)
+        n_max = int(len(loaded_data) / N)
 
-    f_values = np.sum(mask)
+        f_values = np.sum(mask)
 
-    spectorgram_data = np.zeros((n_max, f_values))
+        spectorgram_data = np.zeros((n_max, f_values))
 
-    window = signal.blackman(len(subdata))
+        window = signal.blackman(len(subdata))
 
-    for n in range(0, n_max):
-        subdata = loaded_data[(N * n):(N * (n + 1))]
-        F = fft(subdata * window)
-        spectorgram_data[n, :] = np.log(abs(F[mask]))
+        for n in range(0, n_max):
+            subdata = loaded_data[(N * n):(N * (n + 1))]
+            F = fft(subdata * window)
+            spectorgram_data[n, :] = np.log(abs(F[mask]))
 
-    spectorgram_data_T = spectorgram_data.T
-    # Transposed matrix
+        spectorgram_data_T = spectorgram_data.T
+        # Transposed matrix
 
-    fig, axes = plt.subplots(1, 1, figsize=(8, 6))
-    p = axes.imshow(spectorgram_data_T, origin='lower',
-                    extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
-                    aspect='auto',
-                    cmap=matplotlib.cm.RdBu_r)
-    cb = fig.colorbar(p, ax=axes)
-    cb.set_label("$\log|F|$", fontsize=16)
-    axes.set_xlabel("time (s)", fontsize=14)
-    axes.set_ylabel("Frequency (Hz)", fontsize=14)
-    fig.tight_layout()
 
-    plt.show()
 
-    # figure_plots.clear()
-    # subplot = figure_plots.add_subplot(1, 1, 1)
-    #
-    # subplot.set_xlabel("Frequency (Hz)")
-    # subplot.set_ylabel("Amplitude")
-    # canvas_plots.draw()
+        # fig, axes = plt.subplots(1, 1, figsize=(8, 6))
+        # p = axes.imshow(spectorgram_data_T, origin='lower',
+        #                 extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
+        #                 aspect='auto',
+        #                 cmap=matplotlib.cm.RdBu_r)
+        # cb = fig.colorbar(p, ax=axes)
+        # cb.set_label("$\log|F|$", fontsize=16)
+        #
+        # fig.tight_layout()
+        #
+        # plt.show()
+
+        figure_plots.clear()
+        subplot_one = figure_plots.add_subplot(1, 1, 1)
+        # subplot_two = figure_plots.add_subplot(1, 2, 2)
+
+        subplot_one.imshow(spectorgram_data_T, origin='lower',
+                            extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
+                            aspect='auto',
+                            cmap=matplotlib.cm.RdBu_r)
+
+        # figure_plots.colorbar(subplot_one, ax=subplot_two)
+
+
+        canvas_plots.draw()
+
+
+
+
+        # figure_plots.clear()
+        # subplot = figure_plots.add_subplot(1, 1, 1)
+        #
+        # subplot.set_xlabel("Frequency (Hz)")
+        # subplot.set_ylabel("Amplitude")
+        # canvas_plots.draw()
 
 
 
