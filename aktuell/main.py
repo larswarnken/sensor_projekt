@@ -363,11 +363,19 @@ def plot_spectogram():
                             aspect='auto',
                             cmap=matplotlib.cm.RdBu_r)
 
-        # figure_plots.colorbar(subplot_one, ax=subplot_two)
+        subplot_one.set_xlabel("Time (s)")
+        subplot_one.set_ylabel("Frequency (Hz)")
 
+        # figure_plots.colorbar(subplot_one, ax=subplot_two)
 
         canvas_plots.draw()
 
+    else:
+        figure_plots.clear()
+        subplot_one = figure_plots.add_subplot(1, 1, 1)
+        subplot_one.set_xlabel("Time (s)")
+        subplot_one.set_ylabel("Frequency (Hz)")
+        canvas_plots.draw()
 
 
 
