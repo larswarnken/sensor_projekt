@@ -19,7 +19,6 @@ from scipy.fft import fft, ifft, fft2, ifft2
 import pywt
 import matplotlib.pyplot as plt
 
-
 # gui ------------------------------------------------------------
 
 # main window
@@ -45,7 +44,6 @@ tabControl.add(tab3, text='Liveplot')
 
 # for the plots
 matplotlib.use('TkAgg')
-
 
 # variables -----------------------------------------------------
 
@@ -181,13 +179,12 @@ label_current_file.grid(row=1, column=1, sticky="news")
 
 frame.pack(expand=True)
 
-
 # TAB 2 ---------------------------------------------------------
 
 filename_plot_label = tk.Label(tab2, textvariable=data_filename_label, bg="white")
 
-loaded_data2 = [1,2,3,4,5]
-loaded_data3 = [5,4,3,2,1]
+loaded_data2 = [1, 2, 3, 4, 5]
+loaded_data3 = [5, 4, 3, 2, 1]
 
 bigframe = Frame(tab2, bg='white')
 
@@ -210,7 +207,6 @@ label_test7 = tk.Label(data_frame, text="max Amplitude FFT: ")
 label_test_value7 = tk.Label(data_frame, text='-')
 label_test8 = tk.Label(data_frame, text="max Amplitude Frequenz: ")
 label_test_value8 = tk.Label(data_frame, text='-')
-
 
 show_plot_var = IntVar(value=1)
 
@@ -289,8 +285,8 @@ def plot_fft():
 
         figure_plots.clear()
         subplot = figure_plots.add_subplot(1, 1, 1)
-        subplot.plot(f[:n//2], np.abs(y_fft[:n//2]))
-        subplot.set_xlim(0, fs/2)
+        subplot.plot(f[:n // 2], np.abs(y_fft[:n // 2]))
+        subplot.set_xlim(0, fs / 2)
         subplot.set_xlabel("Frequency (Hz)")
         subplot.set_ylabel("Amplitude")
         canvas_plots.draw()
@@ -340,8 +336,6 @@ def plot_spectogram():
         spectorgram_data_T = spectorgram_data.T
         # Transposed matrix
 
-
-
         # fig, axes = plt.subplots(1, 1, figsize=(8, 6))
         # p = axes.imshow(spectorgram_data_T, origin='lower',
         #                 extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
@@ -359,9 +353,9 @@ def plot_spectogram():
         # subplot_two = figure_plots.add_subplot(1, 2, 2)
 
         subplot_one.imshow(spectorgram_data_T, origin='lower',
-                            extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
-                            aspect='auto',
-                            cmap=matplotlib.cm.RdBu_r)
+                           extent=(0, len(loaded_data) / Fs, 0, Fs / 2),
+                           aspect='auto',
+                           cmap=matplotlib.cm.RdBu_r)
 
         subplot_one.set_xlabel("Time (s)")
         subplot_one.set_ylabel("Frequency (Hz)")
@@ -377,17 +371,12 @@ def plot_spectogram():
         subplot_one.set_ylabel("Frequency (Hz)")
         canvas_plots.draw()
 
-
-
         # figure_plots.clear()
         # subplot = figure_plots.add_subplot(1, 1, 1)
         #
         # subplot.set_xlabel("Frequency (Hz)")
         # subplot.set_ylabel("Amplitude")
         # canvas_plots.draw()
-
-
-
 
 
 def ticked():
@@ -405,10 +394,12 @@ def radio_default():
 
 # plot checkbuttons
 checkbox_frame = Frame(tab2)
-plot_1_checkbutton = Radiobutton(checkbox_frame, text="Time Plot", variable=show_plot_var, value=1,  command=ticked, bg="white")
-plot_2_checkbutton = Radiobutton(checkbox_frame, text="FFT Plot", variable=show_plot_var, value=2, command=ticked, bg="white")
-plot_3_checkbutton = Radiobutton(checkbox_frame, text="Spectrogram", variable=show_plot_var, value=3, command=ticked, bg="white")
-
+plot_1_checkbutton = Radiobutton(checkbox_frame, text="Time Plot", variable=show_plot_var, value=1, command=ticked,
+                                 bg="white")
+plot_2_checkbutton = Radiobutton(checkbox_frame, text="FFT Plot", variable=show_plot_var, value=2, command=ticked,
+                                 bg="white")
+plot_3_checkbutton = Radiobutton(checkbox_frame, text="Spectrogram", variable=show_plot_var, value=3, command=ticked,
+                                 bg="white")
 
 figure_plots = Figure(dpi=100)
 
@@ -456,7 +447,6 @@ label_test_value8.grid(row=7, column=1)
 
 canvas_plots.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-
 # TAB 3 ---------------------------------------------------------
 
 
@@ -481,7 +471,7 @@ def liveplot():
         plot = figure_liveplot.add_subplot()
 
         if len(loaded_data) > 10000:
-            plot.set_xlim([len(loaded_data)-10000, len(loaded_data)])
+            plot.set_xlim([len(loaded_data) - 10000, len(loaded_data)])
         else:
             plot.set_xlim([0, 10000])
 
@@ -496,10 +486,10 @@ def liveplot():
 
 canvas_liveplot.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-
 # main grid ---------------------------------------------------------
 
 tabControl.pack(expand=1, fill='both')
+
 
 # -------------------------------------------------------------------
 
@@ -514,8 +504,6 @@ def tab_switched(*args):
 
         if len(loaded_data) != 0:
             refresh_facts()
-
-
 
     elif tabControl.index(tabControl.select()) == 2:
         liveplot()
@@ -534,9 +522,3 @@ tabControl.bind('<<NotebookTabChanged>>', tab_switched)
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
 root.mainloop()
-
-
-
-
-
-
