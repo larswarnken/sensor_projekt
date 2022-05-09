@@ -73,7 +73,7 @@ def load_data():
         # saves info from first line
         loaded_sample_rate = int(x[0].split(", ")[0])
         loaded_record_time = int(x[0].split(", ")[1])
-        # delete first line which is samppe rate and time
+        # delete first line which is samlpe rate and time
         x.pop(0)
         # adds data to list
         global loaded_data
@@ -461,8 +461,28 @@ toolbar2 = NavigationToolbar2Tk(canvas_liveplot, tab3)
 toolbar2.update()
 
 
+def last_n_lines(fname, n):
+    assert n >= 0
+    pos = n + 1
+    lines = []
+    with open(fname) as f:
+        while len(lines) <= n:
+            try:
+                f.seek(-pos, 2)
+            except IOError:
+                f.seek(0)
+                break
+            finally:
+                lines = list(f)
+            pos *= 2
+    return lines[-n:]
+
+
 # frequently loads data file
 def liveplot():
+
+    last_n_lines("Aufnahmen/data.txt", 2)
+
     global loaded_data
     while currently_recording:
         load_data()
