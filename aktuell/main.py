@@ -28,7 +28,7 @@ import datetime
 
 # main window
 root = tk.Tk()
-root.title("Tab Widget")
+root.title("Vibroakustische Signale")
 root.geometry("1280x720")
 root.configure(background='white')
 
@@ -175,8 +175,10 @@ def browse_files():
 #
 def load_ai_model():
     global loaded_model
-    loaded_model = tf.keras.models.load_model('ai/20220607-192042')
+    model_name = 'efficientNetB0'
+    loaded_model = tf.keras.models.load_model(f'ai/{model_name}')
     print('model loaded')
+    ai_model_label.set(model_name)
 
 
 
