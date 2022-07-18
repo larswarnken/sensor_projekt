@@ -23,6 +23,8 @@ import tensorflow as tf
 from os import walk
 import datetime
 
+import liveplot_file
+
 
 # gui ------------------------------------------------------------
 
@@ -98,6 +100,7 @@ def load_data():
 
 
 def check_if_recording():
+    print('yooooooooooo')
     file_size = -1
     global currently_recording
     global data_filename_var
@@ -113,7 +116,7 @@ def check_if_recording():
             continue
         else:
             print("recording...")
-            tabControl.select(2)
+            # tabControl.select(2)
             currently_recording = True
             break
 
@@ -128,6 +131,8 @@ def check_if_recording():
             print("stopped recording")
             currently_recording = False
             break
+
+    print('boop')
 
     # loads just recorded data
     load_data()
@@ -151,10 +156,16 @@ def new_recording_thread():
     record_thread = threading.Thread(target=new_recording)
     record_thread.start()
 
-    time.sleep(1)
+    time.sleep(0.5)
 
     check_if_recording_thread = threading.Thread(target=check_if_recording)
     check_if_recording_thread.start()
+
+    time.sleep(0.1)
+
+    record_thread2 = threading.Thread(target=liveplot_file.main())
+    record_thread2.start()
+
 
 
 # opens file browser, sets new data file name and loads its content
@@ -175,7 +186,8 @@ def browse_files():
 #
 def load_ai_model():
     global loaded_model
-    model_name = 'efficientNetB0'
+    model_name = 'efficientNetB0_2'
+    loaded_model = tf.keras.models.load_model(f'ai/{model_name}')
     loaded_model = tf.keras.models.load_model(f'ai/{model_name}')
     print('model loaded')
     ai_model_label.set(model_name)
@@ -373,8 +385,8 @@ def save_spectrogram():
                     extent=(0, len(loaded_data) / loaded_sample_rate, 0, loaded_sample_rate / 2),
                     aspect='auto',
                     cmap='RdBu_r')
-    cb = figx.colorbar(p, ax=axes)
-    cb.set_label("$\\log|F|$", fontsize=16)
+    # cb = figx.colorbar(p, ax=axes)
+    # cb.set_label("$\\log|F|$", fontsize=16)
     axes.set_xlabel("time (s)", fontsize=14)
     axes.set_ylabel("Frequency (Hz)", fontsize=14)
     figx.tight_layout()
@@ -529,45 +541,45 @@ toolbar2 = NavigationToolbar2Tk(canvas_liveplot, tab3)
 toolbar2.update()
 
 
-def last_n_lines(fname, n):
-    assert n >= 0
-    pos = n + 1
-    lines = []
-    with open(fname) as f:
-        while len(lines) <= n:
-            try:
-                f.seek(-pos, 2)
-            except IOError:
-                f.seek(0)
-                break
-            finally:
-                lines = list(f)
-            pos *= 2
-    return lines[-n:]
-
-
-# frequently loads data file
-def liveplot():
-
-    last_n_lines("Aufnahmen/data.txt", 2)
-
-    global loaded_data
-    while currently_recording:
-        load_data()
-
-        figure_liveplot.clear()
-        plot = figure_liveplot.add_subplot()
-
-        if len(loaded_data) > 10000:
-            plot.set_xlim([len(loaded_data) - 10000, len(loaded_data)])
-        else:
-            plot.set_xlim([0, 10000])
-
-        plot.plot(loaded_data)
-
-        canvas_liveplot.draw()
-
-    return
+# def last_n_lines(fname, n):
+#     assert n >= 0
+#     pos = n + 1
+#     lines = []
+#     with open(fname) as f:
+#         while len(lines) <= n:
+#             try:
+#                 f.seek(-pos, 2)
+#             except IOError:
+#                 f.seek(0)
+#                 break
+#             finally:
+#                 lines = list(f)
+#             pos *= 2
+#     return lines[-n:]
+#
+#
+# # frequently loads data file
+# def liveplot():
+#
+#     last_n_lines("Aufnahmen/data.txt", 2)
+#
+#     global loaded_data
+#     while currently_recording:
+#         load_data()
+#
+#         figure_liveplot.clear()
+#         plot = figure_liveplot.add_subplot()
+#
+#         if len(loaded_data) > 10000:
+#             plot.set_xlim([0, len(loaded_data)])
+#         else:
+#             plot.set_xlim([0, 10000])
+#
+#         plot.plot(loaded_data)
+#
+#         canvas_liveplot.draw()
+#
+#     return
 
 
 def cut_data():
@@ -641,8 +653,8 @@ def tab_switched(*args):
         if len(loaded_data) != 0:
             refresh_facts()
 
-    elif tabControl.index(tabControl.select()) == 2:
-        liveplot()
+    # elif tabControl.index(tabControl.select()) == 2:
+    #     liveplot()
 
 
 def on_closing():
