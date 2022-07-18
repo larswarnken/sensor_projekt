@@ -33,7 +33,7 @@ class MainWindow(QtWidgets.QMainWindow):
         pen = pg.mkPen(color=(100, 100, 255))
         self.data_line = self.graphWidget.plot(self.x, self.y, pen=pen)
 
-        self.graphWidget.setYRange(-1, 1)
+        # self.graphWidget.setYRange(-1, 1)
 
         self.show()
 
