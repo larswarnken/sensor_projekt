@@ -1,11 +1,7 @@
 import gui
-
-
-def main():
-    root = gui.create_gui()
-    root.mainloop()
-
+import tkinter as tk
 
 if __name__ == '__main__':
-    main()
-
+    root = tk.Tk()
+    gui.MainApplication(root).pack(side="top", fill="both", expand=True)
+    root.mainloop()
