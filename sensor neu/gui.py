@@ -10,9 +10,6 @@ from matplotlib.backends.backend_tkagg import (
 )
 
 
-
-
-
 class MainApplication(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -25,8 +22,8 @@ class MainApplication(tk.Frame):
         style = ttk.Style(parent)
         current_theme = style.theme_use()
         style.theme_use('xpnative')
-        # style.configure('TFrame', background='white')
-        style.configure('left.TFrame', background='#F0F0F0')
+        # style.configure('TFrame', background='green')
+        style.configure('left.TFrame', background='#F0F0F0')  # #F0F0F0
         # style.configure('right.TFrame', background='white')
 
         matplotlib.use('TkAgg')
@@ -37,7 +34,7 @@ class MainApplication(tk.Frame):
         tab_2 = ttk.Frame(tab_control)
         tab_control.add(tab_1, text='Aufnahmen')
         tab_control.add(tab_2, text='Klassifizierung')
-        tab_control.pack(expand=1, fill="both")
+        tab_control.pack(expand=True, fill="both")
 
         # -----------------------------------
 
@@ -50,6 +47,9 @@ class MainApplication(tk.Frame):
         button_1.pack(pady=10)
         button_2 = ttk.Button(frame_left, text="Aufnahme laden", width=25)
         button_2.pack(pady=10)
+
+        label_current_file = ttk.Label(frame_left, text="aktuell geladen: -")
+        label_current_file.pack()
 
         # info part label
         label_info_1 = ttk.Label(frame_left, text="Informationen")
@@ -121,11 +121,11 @@ class MainApplication(tk.Frame):
 
         canvas_plots.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        graph.plot_time(figure_plots, canvas_plots)
+        graph.plot_time(figure_plots, canvas_plots, self.current_path)
 
         def plot_changed(value_p):
             if value_p.get() == 'timeplot':
-                graph.plot_time(figure_plots, canvas_plots)
+                graph.plot_time(figure_plots, canvas_plots, self.current_path)
             elif value_p.get() == 'fftplot':
                 graph.plot_fft(figure_plots, canvas_plots)
             elif value_p.get() == 'spectrogram':
@@ -133,5 +133,5 @@ class MainApplication(tk.Frame):
             else:
                 print('radio button value error')
 
-
-
+    def get_label_current_file(self):
+        return self.current_path
