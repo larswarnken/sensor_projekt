@@ -51,7 +51,7 @@ class MainApplication(tk.Frame):
                               command=lambda: recording.new_recording_thread())
         button_1.pack(pady=10)
         button_2 = ttk.Button(frame_left, text="Aufnahme laden", width=25,
-                              command=lambda: recording.load_recording(self.current_path))
+                              command=lambda: [recording.load_recording(self.current_path), plot_changed(selected)])
         button_2.pack(pady=10)
 
         label_current_file = ttk.Label(frame_left, text='Aktuell geladen: -')
@@ -120,8 +120,6 @@ class MainApplication(tk.Frame):
 
         # time plot as default plot
         graph.plot_time(figure_plots, canvas_plots)
-
-
 
         def plot_changed(value_p):
             if value_p.get() == 'timeplot':
