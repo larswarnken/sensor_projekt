@@ -5,6 +5,7 @@ import json
 import time
 import graph
 import reading_data
+from tkinter import filedialog
 
 
 def check_if_recording():
@@ -47,5 +48,10 @@ def new_recording_thread():
     check_if_recording_thread.start()
 
 
-
-
+def load_recording(path):
+    loaded_path = filedialog.askopenfilename(initialdir=f'{os.getcwd()}/Aufnahmen',
+                                             title="Select a File",
+                                             filetypes=(("Text files", "*.txt"),
+                                                        ("all files", "*.*")))
+    print(loaded_path)
+    reading_data.read_data(loaded_path)

@@ -18,8 +18,6 @@ def read_data(path):
     global loaded_record_time
     global loaded_data
 
-    # path = get_current_path()
-
     # reads data from file
     with open(path, 'r') as file:
         details = file.read()
@@ -35,5 +33,30 @@ def read_data(path):
         for i in x:
             if i != '':
                 loaded_data.append(float(i))
+
+        print(len(loaded_data))
+
+
     except:
         print("reading error")
+
+
+def get_loaded_data():
+    global loaded_data
+    return loaded_data
+
+
+def get_loaded_sample_rate():
+    global loaded_sample_rate
+    return loaded_sample_rate
+
+
+def get_loaded_record_time():
+    global loaded_record_time
+    return loaded_record_time
+
+
+
+
+
+
