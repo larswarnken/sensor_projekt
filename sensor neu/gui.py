@@ -48,7 +48,7 @@ class MainApplication(tk.Frame):
         button_2 = ttk.Button(frame_left, text="Aufnahme laden", width=25)
         button_2.pack(pady=10)
 
-        label_current_file = ttk.Label(frame_left, text="aktuell geladen: -")
+        label_current_file = ttk.Label(frame_left, text='Aktuell geladen: -')
         label_current_file.pack()
 
         # info part label
@@ -84,6 +84,7 @@ class MainApplication(tk.Frame):
         frame_right = ttk.Frame(tab_1)
         frame_right.pack(anchor='n', fill='both', expand=True, side='left')
 
+        # radio buttons for the plot
         frame_radiobuttons = ttk.Frame(frame_right)
         frame_radiobuttons.pack()
 
@@ -99,14 +100,7 @@ class MainApplication(tk.Frame):
         radiobutton_2.grid(column=1, row=0)
         radiobutton_3.grid(column=2, row=0)
 
-        # figure = Figure(figsize=(6, 4), dpi=100)
-        # figure_canvas = FigureCanvasTkAgg(figure, frame_right)
-        # NavigationToolbar2Tk(figure_canvas, frame_right)
-        # axes = figure.add_subplot()
-        # figure.set_facecolor('#F0F0F0')
-        # graph.create_timeplot(axes)
-        # figure_canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
+        # plot frame
         figure_plots = Figure(dpi=100)
         figure_plots.set_facecolor('#F0F0F0')
         canvas_plots = FigureCanvasTkAgg(figure_plots, master=frame_right)
@@ -116,16 +110,14 @@ class MainApplication(tk.Frame):
         toolbar = NavigationToolbar2Tk(canvas_plots, frame_right)
         toolbar.update()
 
-        figure_plots.clear()
-        canvas_plots.draw()
-
         canvas_plots.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        graph.plot_time(figure_plots, canvas_plots, self.current_path)
+        # time plot as default plot
+        graph.plot_time(figure_plots, canvas_plots)
 
         def plot_changed(value_p):
             if value_p.get() == 'timeplot':
-                graph.plot_time(figure_plots, canvas_plots, self.current_path)
+                graph.plot_time(figure_plots, canvas_plots)
             elif value_p.get() == 'fftplot':
                 graph.plot_fft(figure_plots, canvas_plots)
             elif value_p.get() == 'spectrogram':
@@ -133,5 +125,3 @@ class MainApplication(tk.Frame):
             else:
                 print('radio button value error')
 
-    def get_label_current_file(self):
-        return self.current_path

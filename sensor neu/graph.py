@@ -4,16 +4,17 @@ loaded_sample_rate = 0
 loaded_record_time = 0
 loaded_data = []
 
+
 def get_current_path():
     return ''
 
-def read_data():
+
+def read_data(path):
     global loaded_sample_rate
     global loaded_record_time
     global loaded_data
 
-    path = get_current_path()
-
+    # path = get_current_path()
 
     # reads data from file
     with open(path, 'r') as file:
@@ -34,10 +35,10 @@ def read_data():
         print("reading error")
 
 
-def plot_time(figure_plots, canvas_plots, path):
+def plot_time(figure_plots, canvas_plots):
     print('plotted time')
 
-    read_data(path)
+    # read_data(path)
 
     figure_plots.clear()
     subplot = figure_plots.add_subplot(1, 1, 1)
