@@ -1,6 +1,6 @@
 {
     "bufferFrames": 256,
     "frameRate": 30000,
-    "outputPath": "Aufnahmen/data_110.txt",
-    "recordTime": 2000
+    "outputPath": "Aufnahmen/data_111.txt",
+    "recordTime": 20000
 }

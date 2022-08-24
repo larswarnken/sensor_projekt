@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import matplotlib
 import graph
+import recording
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (
@@ -11,6 +12,8 @@ from matplotlib.backends.backend_tkagg import (
 
 
 class MainApplication(tk.Frame):
+    current_path = 'D:/Benutzer/Lars/Dokumente/GitHub/sensor_projekt/sensor neu/Aufnahmen/data_10.txt'
+
     def __init__(self, parent, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
@@ -43,9 +46,11 @@ class MainApplication(tk.Frame):
         frame_left.pack(anchor='w', fill='y', expand=False, side='left')
 
         # buttons: neue aufnahme, aufnahme laden
-        button_1 = ttk.Button(frame_left, text="Neue Aufnahme", width=25)
+        button_1 = ttk.Button(frame_left, text="Neue Aufnahme", width=25,
+                              command=lambda: recording.new_recording_thread())
         button_1.pack(pady=10)
-        button_2 = ttk.Button(frame_left, text="Aufnahme laden", width=25)
+        button_2 = ttk.Button(frame_left, text="Aufnahme laden", width=25,
+                              )
         button_2.pack(pady=10)
 
         label_current_file = ttk.Label(frame_left, text='Aktuell geladen: -')
@@ -125,3 +130,8 @@ class MainApplication(tk.Frame):
             else:
                 print('radio button value error')
 
+        def on_closing():
+            exit()
+
+        parent.protocol("WM_DELETE_WINDOW", on_closing)
+        parent.mainloop()
