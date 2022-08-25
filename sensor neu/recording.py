@@ -33,7 +33,7 @@ def check_if_recording():
         if not os.path.isfile(recording_path):
             continue
         else:
-            print("recording...")
+            print("recording now")
             recording = True
             break
 
@@ -62,6 +62,9 @@ def new_recording_thread():
     record_thread.start()
 
     time.sleep(0.5)
+
+    liverecord = os.path.join(os.path.dirname(__file__), 'liveplot.exe')
+    subprocess.call([liverecord])
 
     # check_if_recording_thread = threading.Thread(target=check_if_recording, daemon=True)
     # check_if_recording_thread.start()

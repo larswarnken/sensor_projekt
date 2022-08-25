@@ -40,10 +40,6 @@ def read_data(path):
         for i in x:
             if i != '':
                 loaded_data.append(float(i))
-
-        print(len(loaded_data))
-
-
     except:
         print("reading error")
 

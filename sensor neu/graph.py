@@ -5,7 +5,6 @@ import reading_data
 def plot_time(figure_plots, canvas_plots, data=None):
     if data is None:
         data = []
-    print('plotted time')
 
     data = reading_data.get_loaded_data()
 
@@ -20,12 +19,10 @@ def plot_time(figure_plots, canvas_plots, data=None):
 def plot_fft(figure_plots, canvas_plots, data=None):
     if data is None:
         data = []
-    print('plotted fft')
     figure_plots.clear()
 
 
 def plot_spectrogram(figure_plots, canvas_plots, data=None):
     if data is None:
         data = []
-    print('plotted spectrogram')
     figure_plots.clear()
