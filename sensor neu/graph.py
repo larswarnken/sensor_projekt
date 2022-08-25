@@ -7,7 +7,7 @@ def plot_time(figure_plots, canvas_plots, data=None):
         data = []
     print('plotted time')
 
-    # read_data(path)
+    data = reading_data.get_loaded_data()
 
     figure_plots.clear()
     subplot = figure_plots.add_subplot(1, 1, 1)

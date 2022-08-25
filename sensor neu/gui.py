@@ -1,15 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
-import matplotlib
 import graph
 import reading_data
 import recording
 
-from matplotlib.figure import Figure
+import matplotlib
+
+matplotlib.use('TkAgg')
+
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg,
     NavigationToolbar2Tk
 )
+
+from matplotlib.figure import Figure
 
 
 class MainApplication(tk.Frame):
@@ -30,8 +34,6 @@ class MainApplication(tk.Frame):
         style.configure('left.TFrame', background='#F0F0F0')  # #F0F0F0
         # style.configure('right.TFrame', background='white')
 
-        matplotlib.use('TkAgg')
-
         # tab control
         tab_control = ttk.Notebook(parent)
         tab_1 = ttk.Frame(tab_control)
@@ -48,7 +50,7 @@ class MainApplication(tk.Frame):
 
         # buttons: neue aufnahme, aufnahme laden
         button_1 = ttk.Button(frame_left, text="Neue Aufnahme", width=25,
-                              command=lambda: recording.new_recording_thread())
+                              command=lambda: [recording.new_recording_thread(), plot_changed(selected)])
         button_1.pack(pady=10)
         button_2 = ttk.Button(frame_left, text="Aufnahme laden", width=25,
                               command=lambda: [recording.load_recording(self.current_path), plot_changed(selected)])
