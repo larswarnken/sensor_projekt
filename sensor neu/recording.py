@@ -61,8 +61,6 @@ def new_recording_thread():
     record_thread = threading.Thread(target=new_recording, daemon=True)
     record_thread.start()
 
-    time.sleep(0.5)
-
     liverecord = os.path.join(os.path.dirname(__file__), 'liveplot.exe')
     subprocess.call([liverecord])
 

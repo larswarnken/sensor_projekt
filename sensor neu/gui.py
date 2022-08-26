@@ -45,7 +45,7 @@ class MainApplication(tk.Frame):
         # -----------------------------------
 
         # left frame
-        frame_left = ttk.Frame(tab_1, padding=40, style='left.TFrame')
+        frame_left = ttk.Frame(tab_1, padding=30, style='left.TFrame')
         frame_left.pack(anchor='w', fill='y', expand=False, side='left')
 
         # buttons: neue aufnahme, aufnahme laden
@@ -87,6 +87,10 @@ class MainApplication(tk.Frame):
         # to update tree information
         tree_information.item('i3', values=('info 3', '2'))
 
+        button_detect_hit = ttk.Button(frame_left, text="Schlag erkennen", width=25,
+                                       command=lambda: [reading_data.detect_hit(), plot_changed(selected)])
+        button_detect_hit.pack(pady=10)
+
         # -----------------------------------
 
         frame_right = ttk.Frame(tab_1)
@@ -122,6 +126,8 @@ class MainApplication(tk.Frame):
 
         # time plot as default plot
         graph.plot_time(figure_plots, canvas_plots)
+
+        # -----------------------------------
 
         def plot_changed(value_p):
             if value_p.get() == 'timeplot':

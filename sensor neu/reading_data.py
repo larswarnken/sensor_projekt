@@ -44,6 +44,39 @@ def read_data(path):
         print("reading error")
 
 
+def detect_hit():
+    global loaded_data
+    global loaded_sample_rate
+
+    if len(loaded_data) > 0:
+
+        max_value = max(loaded_data)
+
+        puffer_seconds = 1.5
+        puffer_samples = round(puffer_seconds * loaded_sample_rate)
+
+        trigger_value = max_value * 0.4
+
+        if len(loaded_data) > puffer_samples:
+
+            for value in loaded_data:
+                if value >= trigger_value:
+                    start_index = round(loaded_data.index(value) - loaded_sample_rate * 0.10)
+                    end_index = start_index + puffer_samples
+
+                    cut_data = loaded_data[start_index:end_index]
+
+                    print('length cut data: ', len(cut_data))
+
+                    loaded_data = cut_data
+
+                    break
+        else:
+            print('data too short')
+    else:
+        print('no data loaded')
+
+
 def get_loaded_data():
     global loaded_data
     return loaded_data
@@ -67,8 +100,3 @@ def get_current_path():
 def set_current_path(path):
     global current_path
     current_path = path
-
-
-
-
-
