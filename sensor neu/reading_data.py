@@ -100,3 +100,7 @@ def get_current_path():
 def set_current_path(path):
     global current_path
     current_path = path
+
+
+def change_info(tree):
+    tree.item('i3', values=('max Amplitude', '2'))

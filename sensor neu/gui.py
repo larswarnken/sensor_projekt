@@ -85,7 +85,7 @@ class MainApplication(tk.Frame):
         tree_information.pack()
 
         # to update tree information
-        tree_information.item('i3', values=('info 3', '2'))
+        reading_data.change_info(tree_information)
 
         button_detect_hit = ttk.Button(frame_left, text="Schlag erkennen", width=25,
                                        command=lambda: [reading_data.detect_hit(), plot_changed(selected)])
