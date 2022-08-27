@@ -29,7 +29,7 @@ class MainApplication(tk.Frame):
         # styles
         style = ttk.Style(parent)
         current_theme = style.theme_use()
-        style.theme_use('xpnative')
+        #  style.theme_use('xpnative')
         # style.configure('TFrame', background='green')
         style.configure('left.TFrame', background='#F0F0F0')  # #F0F0F0
         # style.configure('right.TFrame', background='white')
@@ -73,14 +73,14 @@ class MainApplication(tk.Frame):
         tree_information.column("# 2", anchor='w', width=80)
         tree_information.heading("# 2", text="Wert", anchor='w')
 
-        tree_information.insert(parent='', index='end', iid='i1', values=('info 1', '0'))
-        tree_information.insert(parent='', index='end', iid='i2', values=('info 2', '0'))
-        tree_information.insert(parent='', index='end', iid='i3', values=('info 3', '0'))
-        tree_information.insert(parent='', index='end', iid='i4', values=('info 4', '0'))
-        tree_information.insert(parent='', index='end', iid='i5', values=('info 5', '0'))
-        tree_information.insert(parent='', index='end', iid='i6', values=('info 6', '0'))
-        tree_information.insert(parent='', index='end', iid='i7', values=('info 7', '0'))
-        tree_information.insert(parent='', index='end', iid='i8', values=('info 8', '0'))
+        tree_information.insert(parent='', index='end', iid='i1', values=('Aufnahmelänge', '0'))
+        tree_information.insert(parent='', index='end', iid='i2', values=('Sample Rate', '0'))
+        tree_information.insert(parent='', index='end', iid='i3', values=('max Amplitude', '0'))
+        tree_information.insert(parent='', index='end', iid='i4', values=('max Amplitude Zeit', '0'))
+        tree_information.insert(parent='', index='end', iid='i5', values=('RMS', '0'))
+        tree_information.insert(parent='', index='end', iid='i6', values=('Signalenergie', '0'))
+        tree_information.insert(parent='', index='end', iid='i7', values=('max Amplitude FFT', '0'))
+        tree_information.insert(parent='', index='end', iid='i8', values=('max Amplitude Frequenz', '0'))
 
         tree_information.pack()
 
