@@ -58,7 +58,7 @@ def detect_hit():
         trigger_value = max_value * 0.4
 
         if len(loaded_data) > puffer_samples:
-
+            hit_found = False
             for value in loaded_data:
                 if value >= trigger_value:
                     start_index = round(loaded_data.index(value) - loaded_sample_rate * 0.10)
@@ -70,7 +70,11 @@ def detect_hit():
 
                     loaded_data = cut_data
 
+                    hit_found = True
+
                     break
+            if not hit_found:
+                print("no hit found")
         else:
             print('data too short')
     else:
