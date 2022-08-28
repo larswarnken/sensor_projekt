@@ -107,4 +107,17 @@ def set_current_path(path):
 
 
 def change_info(tree):
-    tree.item('i3', values=('max Amplitude', '2'))
+    global loaded_sample_rate
+    global loaded_record_time
+    global loaded_data
+
+    if loaded_data:
+
+        tree.item('i1', values=('Aufnahmelänge', f'{loaded_record_time/1000}'))
+        tree.item('i2', values=('Abtastrate', f'{loaded_sample_rate}'))
+
+        max_ampl = max(loaded_data)
+        index_max_ampl = loaded_data.index(max_ampl)
+
+        tree.item('i3', values=('max Ampl.', f'{max_ampl}'))
+        tree.item('i4', values=('max Ampl. Zeit', f'{index_max_ampl/loaded_sample_rate}'))

@@ -67,25 +67,22 @@ class MainApplication(tk.Frame):
         tree_information = ttk.Treeview(frame_left, show='headings', height=8)
         tree_information['columns'] = ('feature', 'value')
 
-        tree_information.column("# 1", anchor='w', width=80)
+        tree_information.column("# 1", anchor='w', width=120)
         tree_information.heading("# 1", text="Merkmal", anchor='w')
 
-        tree_information.column("# 2", anchor='w', width=80)
+        tree_information.column("# 2", anchor='w', width=60)
         tree_information.heading("# 2", text="Wert", anchor='w')
 
         tree_information.insert(parent='', index='end', iid='i1', values=('Aufnahmelänge', '0'))
-        tree_information.insert(parent='', index='end', iid='i2', values=('Sample Rate', '0'))
-        tree_information.insert(parent='', index='end', iid='i3', values=('max Amplitude', '0'))
-        tree_information.insert(parent='', index='end', iid='i4', values=('max Amplitude Zeit', '0'))
+        tree_information.insert(parent='', index='end', iid='i2', values=('Abtastrate', '0'))
+        tree_information.insert(parent='', index='end', iid='i3', values=('max Ampl.', '0'))
+        tree_information.insert(parent='', index='end', iid='i4', values=('max Ampl. Zeit', '0'))
         tree_information.insert(parent='', index='end', iid='i5', values=('RMS', '0'))
         tree_information.insert(parent='', index='end', iid='i6', values=('Signalenergie', '0'))
-        tree_information.insert(parent='', index='end', iid='i7', values=('max Amplitude FFT', '0'))
-        tree_information.insert(parent='', index='end', iid='i8', values=('max Amplitude Frequenz', '0'))
+        tree_information.insert(parent='', index='end', iid='i7', values=('max Ampl. FFT', '0'))
+        tree_information.insert(parent='', index='end', iid='i8', values=('max Ampl. Freq.', '0'))
 
         tree_information.pack()
-
-        # to update tree information
-        reading_data.change_info(tree_information)
 
         button_detect_hit = ttk.Button(frame_left, text="Schlag erkennen", width=25,
                                        command=lambda: [reading_data.detect_hit(), plot_changed(selected)])
@@ -132,8 +129,10 @@ class MainApplication(tk.Frame):
         def plot_changed(value_p):
             if value_p.get() == 'timeplot':
                 graph.plot_time(figure_plots, canvas_plots)
+                reading_data.change_info(tree_information)
             elif value_p.get() == 'fftplot':
                 graph.plot_fft(figure_plots, canvas_plots)
+                reading_data.change_info(tree_information)
             elif value_p.get() == 'spectrogram':
                 graph.plot_spectrogram(figure_plots, canvas_plots)
             else:
