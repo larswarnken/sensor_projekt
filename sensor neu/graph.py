@@ -5,6 +5,7 @@ from scipy import signal
 from scipy.fft import fftfreq
 from scipy.fft import fft
 import matplotlib
+import matplotlib.pyplot as plt
 
 
 def plot_time(figure_plots, canvas_plots, data=None):
@@ -18,7 +19,30 @@ def plot_time(figure_plots, canvas_plots, data=None):
     subplot.plot(data)
     subplot.set_xlabel("Time")
     subplot.set_ylabel("Amplitude")
+
     canvas_plots.draw()
+
+    if not data:
+        subplot.set_xlim(0, 10)
+        subplot.set_ylim(-1, 1)
+    else:
+        sample_rate = reading_data.get_loaded_sample_rate()
+        time = reading_data.get_loaded_record_time()
+
+        labels = [item.get_text() for item in subplot.get_xticklabels()]
+
+        print(labels)
+        for i in range(len(labels)):
+            if '−' not in labels[i]:
+                print(labels[i])
+                new_label = round(int(labels[i])/sample_rate)
+                labels[i] = new_label
+
+        subplot.set_xticklabels(labels)
+
+        plt.show()
+
+        canvas_plots.draw()
 
 
 def plot_fft(figure_plots, canvas_plots, data=None):
