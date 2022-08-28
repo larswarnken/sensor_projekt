@@ -57,19 +57,48 @@ def new_recording():
     subprocess.call([cpp_file])
 
 
+def liveplot_exe():
+    liverecord = os.path.join(os.path.dirname(__file__), 'liveplot.exe')
+    subprocess.call([liverecord])
+
+
 def new_recording_thread():
     record_thread = threading.Thread(target=new_recording, daemon=True)
     record_thread.start()
 
-    liverecord = os.path.join(os.path.dirname(__file__), 'liveplot.exe')
-    subprocess.call([liverecord])
+    record_thread2 = threading.Thread(target=check_if_recording, daemon=True)
+    record_thread2.start()
+
+    record_thread3 = threading.Thread(target=liveplot_exe, daemon=True)
+    record_thread3.start()
 
     # check_if_recording_thread = threading.Thread(target=check_if_recording, daemon=True)
     # check_if_recording_thread.start()
 
-    check_if_recording()
+    while check_recording_open():
+        if not check_recording_open():
+            break
+        time.sleep(0.5)
 
 
 def get_recording():
     global recording
     return recording
+
+
+def process_exists(process_name):
+    try:
+        call = 'TASKLIST', '/FI', 'imagename eq %s' % process_name
+        # use buildin check_output right away
+        output = subprocess.check_output(call).decode()
+        # check in last line for process name
+        last_line = output.strip().split('\r\n')[-1]
+        # because Fail message could be translated
+        return last_line.lower().startswith(process_name.lower())
+    except UnicodeDecodeError:
+        return False
+
+
+def check_recording_open():
+    while process_exists('record.exe'):
+        time.sleep(0.5)
