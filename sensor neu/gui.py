@@ -24,7 +24,7 @@ class MainApplication(tk.Frame):
         self.parent = parent
 
         parent.title("title")
-        parent.geometry('854x480')
+        parent.geometry('1280x720')
 
         # styles
         style = ttk.Style(parent)
@@ -42,7 +42,7 @@ class MainApplication(tk.Frame):
         tab_control.add(tab_2, text='Klassifizierung')
         tab_control.pack(expand=True, fill="both")
 
-        # -----------------------------------
+        # tab 1 -----------------------------------
 
         # left frame
         frame_left = ttk.Frame(tab_1, padding=30, style='left.TFrame')
@@ -124,7 +124,144 @@ class MainApplication(tk.Frame):
         # time plot as default plot
         graph.plot_time(figure_plots, canvas_plots)
 
-        # -----------------------------------
+        # tab 2 -----------------------------------
+
+        import main_neuGUI_O
+
+        info = tk.Label(tab_2, justify='left', font=("Helvetica", 16),
+                        text="""\
+                            Methoden zur Klassifizierung 
+
+                 1) Gewünschte Methode wählen.
+                 2) cross validation oder normale Wiederholung wählen
+                 3) test size eingeben (eine Zahl zwischen 0 und 0.5 ).
+                 4) Taste "Speichern" drücken
+                 5) Taste "Durchführen" drücken.""", bg="white")
+
+        mth_NW = "neural network"
+        mth_DT = "decision tree"
+        crossVali_yes = "cross validation"
+        crossVali_no = "normale Wiederholung"
+
+        methode_wahl = tk.StringVar(tab_2)
+        methode_wahl.set(mth_NW)  # default value
+        ifCrossVali = tk.StringVar(tab_2)
+        ifCrossVali.set(crossVali_yes)  # default value
+
+        tk.Label(tab_2, text="test size", bg="white", font=("Helvetica", 16)).grid(row=4)
+        tk.Label(tab_2, text="repeat n times", bg="white", font=("Helvetica", 16)).grid(row=5)
+
+        entry_testSize = ttk.Entry(tab_2)
+        entry_repeatTimes = ttk.Entry(tab_2)
+
+        option_methode = tk.OptionMenu(tab_2, methode_wahl, mth_NW, mth_DT)
+        option_methode.configure(width=25, font=("Helvetica", 16))
+        optionen_cv = tk.OptionMenu(tab_2, ifCrossVali, crossVali_yes, crossVali_no)
+        optionen_cv.configure(width=25, font=("Helvetica", 16))
+
+        label_egbs1 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text="Genauigkeit: ", bg="white")
+        label_egbs2 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text="ausgewogene Genauigkeit( bac ): ",
+                               bg="white")
+        label_egbs3 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text="Material: ", bg="white")
+
+        ausgabe1 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text=" ", bg="white")
+        ausgabe2 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text=" ", bg="white")
+        ausgabe3 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text=" ", bg="white")  # predict result
+
+        run_button = tk.Button(tab_2, text="Durchführen", font=("Helvetica", 16), command=lambda: button_action_execute())
+        load_classifier_button = tk.Button(tab_2, text="Klassifikator laden", font=("Helvetica", 16),
+                                           command=lambda: button_action_load_klassifikator())
+        predict_button = tk.Button(tab_2, text="Klassifizierung", font=("Helvetica", 16), command=lambda: button_action_predict())
+
+        info.grid(row=0, column=0, columnspan=3, pady=20, padx=150)
+        option_methode.grid(row=1, column=0, columnspan=1, pady=20)
+        optionen_cv.grid(row=1, column=1, columnspan=1, pady=20)
+
+        run_button.grid(row=6, column=1, pady=20)
+        load_classifier_button.grid(row=1, column=3, sticky='w', pady=20)
+        predict_button.grid(row=2, column=3, sticky='w', pady=20)
+
+        label_egbs1.grid(row=7, column=0, pady=20)
+        label_egbs2.grid(row=8, column=0, pady=20)
+        label_egbs3.grid(row=3, column=3, pady=20)
+        # optionen_cv.grid_rowconfigure(1,weight=1)
+        ausgabe1.grid(row=7, column=1, columnspan=2, pady=20)
+        ausgabe2.grid(row=8, column=1, columnspan=2, pady=20)
+        ausgabe3.grid(row=3, column=4, columnspan=2, pady=20)
+
+        entry_testSize.grid(row=4, column=1, pady=20)
+        entry_repeatTimes.grid(row=5, column=1, pady=20)
+
+        tk.Button(tab_2, text='Speichern', command=lambda: button_action_save(), font=("Helvetica", 16)).grid(row=5, column=2,
+                                                                                                   sticky='w', pady=20)
+
+        def button_action_save():
+            testsize_str = entry_testSize.get()
+            global testsize
+            testsize = float(testsize_str)
+
+            repeat_n_times_str = entry_repeatTimes.get()
+            global repeat_n_times
+            repeat_n_times = int(repeat_n_times_str)
+
+            wahl1 = methode_wahl.get()
+            if wahl1 == mth_NW:
+                global klassi_methode
+                klassi_methode = "neural_network"
+            elif wahl1 == mth_DT:
+                klassi_methode = "decision_tree"
+
+            wahl2 = ifCrossVali.get()
+            if wahl2 == crossVali_yes:
+                global wh_methode
+                wh_methode = "True"
+            elif wahl2 == crossVali_no:
+                wh_methode = "False"
+
+        def button_action_execute():
+            results = main_neuGUI_O.result(klassi_methode, wh_methode, repeat_n_times, testsize)
+            global score
+            score = results[0]
+            ausgabe1.configure(text=str(score) + "%")
+            global balanced_accuracy
+            balanced_accuracy = results[1]
+            ausgabe2.configure(text=str(balanced_accuracy) + "%")
+
+        def button_action_load_klassifikator():
+            from tkinter import filedialog as fd
+
+            filename = fd.askopenfilename()
+            global classifier
+            classifier = main_neuGUI_O.load_classifier(filename)
+            print(classifier)
+
+        # todo gespeicherte Klassifikator .pickle datei auswählen
+
+        def button_action_predict():
+            # to vorhersagende Data-> test_data in
+            data_list = main_neuGUI_O.get_test_data()
+            # print(data_list)
+            global prediction
+            prediction = main_neuGUI_O.predict_single_data(classifier, data_list)
+            ausgabe3.configure(text=prediction)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         def plot_changed(value_p):
             if value_p.get() == 'timeplot':
