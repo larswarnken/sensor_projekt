@@ -168,6 +168,9 @@ class MainApplication(tk.Frame):
         ausgabe2 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text=" ", bg="white")
         ausgabe3 = tk.Label(tab_2, justify='center', font=("Helvetica", 16), text=" ", bg="white")  # predict result
 
+        tk.Button(tab_2, text='Speichern', command=lambda: button_action_save(), font=("Helvetica", 16)).grid(row=5, column=2,
+                                                                                                   sticky='w', pady=20)
+
         run_button = tk.Button(tab_2, text="Durchführen", font=("Helvetica", 16), command=lambda: button_action_execute())
         load_classifier_button = tk.Button(tab_2, text="Klassifikator laden", font=("Helvetica", 16),
                                            command=lambda: button_action_load_klassifikator())
@@ -192,8 +195,6 @@ class MainApplication(tk.Frame):
         entry_testSize.grid(row=4, column=1, pady=20)
         entry_repeatTimes.grid(row=5, column=1, pady=20)
 
-        tk.Button(tab_2, text='Speichern', command=lambda: button_action_save(), font=("Helvetica", 16)).grid(row=5, column=2,
-                                                                                                   sticky='w', pady=20)
 
         def button_action_save():
             testsize_str = entry_testSize.get()

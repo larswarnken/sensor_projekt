@@ -85,12 +85,13 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
     # trains and tests ai n times, calculates average accuracy
     global pp
 
-    if(crossvalidation == "True"):
+    if (crossvalidation == "True"):
         print("repeat n times:", repeat_n_times)
+        print("split in n folds:", (int)(1 / testsize))
         for i in range(repeat_n_times):
             selected_features = np.array(selected_features)
             X, y = selected_features, y3
-            kf = KFold(n_splits=10, shuffle=True)
+            kf = KFold(n_splits=(int)(1 / testsize), shuffle=True)
             kf.get_n_splits(X)
             print(kf)
             pp = PdfPages("decision_trees_crossvalidation.pdf")
@@ -99,6 +100,7 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
                 X_train, X_test = X[train_index], X[test_index]
                 y_train, y_test = y[train_index], y[test_index]
                 if (methode == "neural_network"):
+                    X_train, X_test = scale_data(X_train, X_test)
                     score = neural_network(X_train, X_test, y_train, y_test, bac_list)
                 if (methode == "decision_tree"):
                     score = decision_tree(X_train, X_test, y_train, y_test, num_x, bac_list)
@@ -122,6 +124,7 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
 
 
             if (methode == "neural_network"):
+                X_train, X_test = scale_data(X_train, X_test)
                 score = neural_network(X_train, X_test, y_train, y_test, bac_list)
             if (methode == "decision_tree"):
                 # save multiple decision trees plots in one file
@@ -261,6 +264,13 @@ def predict_single_data(modul, data_list):
     print(material_class[prediction_index])
     return material_class[prediction_index]
 
+def scale_data(X_train, X_test):
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+    return X_train, X_test
 
 
 # progress_value = round(i / repeat_n_times * 10)
