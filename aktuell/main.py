@@ -202,7 +202,7 @@ frame = Frame(tab1, bg="white")
 
 button_new_recording = tk.Button(frame, text="New Recording", command=new_recording_thread)
 button_load_recording = tk.Button(frame, text="Load Recording", command=browse_files)
-button_load_ai_model = tk.Button(frame, text="Load AI Model", command=load_ai_model)
+# button_load_ai_model = tk.Button(frame, text="Load AI Model", command=load_ai_model)
 
 label_current_file_dings = tk.Label(frame, text="Current File: ", bg="white")
 label_current_file = tk.Label(frame, textvariable=data_filename_label, bg="white")
@@ -213,11 +213,11 @@ label_current_ai_model = tk.Label(frame, textvariable=ai_model_label, bg="white"
 
 button_new_recording.grid(row=0, column=0, padx=30, pady=30, sticky="news")
 button_load_recording.grid(row=0, column=1, padx=30, pady=30, sticky="news")
-button_load_ai_model.grid(row=0, column=2, padx=30, pady=30, sticky="news")
+# button_load_ai_model.grid(row=0, column=2, padx=30, pady=30, sticky="news")
 
 label_current_file_dings.grid(row=1, column=0, sticky="news")
 label_current_file.grid(row=1, column=1, sticky="news")
-label_current_ai_model.grid(row=1, column=2, sticky="news")
+# label_current_ai_model.grid(row=1, column=2, sticky="news")
 
 
 frame.pack(expand=True)
@@ -631,8 +631,8 @@ button_detect_hit = tk.Button(data_frame, text="Detect Hit",
 button_detect_hit.grid(row=8, column=0)
 
 
-button_predict = tk.Button(data_frame, text="Classify Hit", command=use_ai)
-button_predict.grid(row=9, column=0)
+# button_predict = tk.Button(data_frame, text="Classify Hit", command=use_ai)
+# button_predict.grid(row=9, column=0)
 
 # ---------------------------------------------------
 

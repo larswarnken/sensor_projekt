@@ -29,16 +29,16 @@ def plot_time(figure_plots, canvas_plots, data=None):
         sample_rate = reading_data.get_loaded_sample_rate()
         time = reading_data.get_loaded_record_time()
 
-        labels = [item.get_text() for item in subplot.get_xticklabels()]
-
-        print(labels)
-        for i in range(len(labels)):
-            if '−' not in labels[i]:
-                print(labels[i])
-                new_label = round(int(labels[i])/sample_rate)
-                labels[i] = new_label
-
-        subplot.set_xticklabels(labels)
+        # labels = [item.get_text() for item in subplot.get_xticklabels()]
+        #
+        # print(labels)
+        # for i in range(len(labels)):
+        #     if '−' not in labels[i]:
+        #         print(labels[i])
+        #         new_label = round(int(labels[i])/sample_rate)
+        #         labels[i] = new_label
+        #
+        # subplot.set_xticklabels(labels)
 
         plt.show()
 
