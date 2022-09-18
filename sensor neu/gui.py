@@ -84,9 +84,20 @@ class MainApplication(tk.Frame):
 
         tree_information.pack()
 
+        checkbox_save_cut_var = tk.StringVar()
         button_detect_hit = ttk.Button(frame_left, text="Schlag erkennen", width=25,
-                                       command=lambda: [reading_data.detect_hit(), plot_changed(selected)])
+                                       command=lambda: [reading_data.detect_hit(checkbox_save_cut_var),
+                                                        plot_changed(selected)])
         button_detect_hit.pack(pady=10)
+
+        checkbox_save_cut = ttk.Checkbutton(frame_left,
+                                            text='als neue Datei speichern',
+                                            onvalue='save',
+                                            offvalue='dont_save',
+                                            variable=checkbox_save_cut_var)
+
+        checkbox_save_cut.pack()
+
 
         # -----------------------------------
 

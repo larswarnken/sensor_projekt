@@ -44,10 +44,14 @@ def read_data(path):
         print("reading error")
 
 
-def detect_hit():
+def detect_hit(save_var):
     global loaded_data
     global loaded_sample_rate
     global loaded_record_time
+    global current_path
+
+    current_file = current_path.split('/')[-1]
+    current_file = current_file.split('.')[0]
 
     if len(loaded_data) > 0:
 
@@ -70,9 +74,16 @@ def detect_hit():
                     print('length cut data: ', len(cut_data))
 
                     loaded_data = cut_data
-                    loaded_record_time = 1.5
+                    loaded_record_time = 1500
 
                     hit_found = True
+
+                    if save_var.get() == 'save':
+                        with open(f'Aufnahmen/{current_file}_cut.txt', 'w') as file:
+                            file.write(f'{loaded_sample_rate}, {loaded_record_time}\n')
+                            for line in loaded_data:
+                                file.write(str(line) + '\n')
+
 
                     break
             if not hit_found:
