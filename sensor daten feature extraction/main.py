@@ -53,47 +53,106 @@ def extract_features_from_file(path):
     features.to_csv("features.csv", index=False)
 
 
+def extract_10_custom_features(data_p):
+
+    fc_parameters = {
+        "fourier_entropy": [{"bins": 10},
+                            {"bins": 100},
+                            {"bins": 5}],
+        "ratio_beyond_r_sigma": [{"r": 10}],
+        "agg_linear_trend": [{"attr": "rvalue", "chunk_len": 10, "f_agg": "min"},
+                             {"attr": "rvalue", "chunk_len": 5, "f_agg": "max"}],
+        "kurtosis": [],
+        "partial_autocorrelation": [{"lag": 1}],
+        "cid_ce": [{"normalize": True}],
+        "agg_autocorrelation": [{"f_agg": "mean", "maxlag": 40}]
+    }
+
+    # settings = EfficientFCParameters()
+    #
+    features = tsfresh.extract_features(data_p, column_id="id", default_fc_parameters=fc_parameters)
+
+    return features
+
+    # features.to_csv("custom features.csv", index=False)
+
+
+def extract_20_custom_features(data_p):
+
+    fc_parameters = {
+        "fourier_entropy": [{"bins": 10},
+                            {"bins": 100},
+                            {"bins": 5}],
+        "ratio_beyond_r_sigma": [{"r": 10}],
+        "agg_linear_trend": [{"attr": "rvalue", "chunk_len": 10, "f_agg": "min"},
+                             {"attr": "rvalue", "chunk_len": 5, "f_agg": "max"},
+                             {"attr": "rvalue", "chunk_len": 5, "f_agg": "min"},
+                             {"attr": "rvalue", "chunk_len": 10, "f_agg": "max"}],
+        "kurtosis": [],
+        "partial_autocorrelation": [{"lag": 1}],
+        "cid_ce": [{"normalize": True}],
+        "agg_autocorrelation": [{"f_agg": "mean", "maxlag": 40}],
+        "autocorrelation": [{"lag": 9},
+                            {"lag": 8},
+                            {"lag": 6},
+                            {"lag": 5},
+                            {"lag": 4},
+                            {"lag": 3},
+                            {"lag": 2},
+                            {"lag": 1}]
+    }
+
+    # settings = EfficientFCParameters()
+
+    features = tsfresh.extract_features(data_p, column_id="id", default_fc_parameters=fc_parameters)
+
+    return features
+
+    # features.to_csv("custom features.csv", index=False)
+
 
 if __name__ == '__main__':
 
-    # folders = ["gummi", "metall", "plastik", "stift"]
-    #
-    # y_list = []
-    #
-    # for folder in folders[0:1]:
-    #     print(folder)
-    #     time_1 = datetime.datetime.now().replace(microsecond=0)
-    #     # dateien im ordner holen
-    #     files_list = give_files_in_dir(f"Aufnahmen getrennt/{folder}")
-    #     # durch jede file im ordner gehen
-    #     all_features = pd.DataFrame()
-    #     for element in files_list[0:1]:
-    #         data = read_data_from_file(f"Aufnahmen getrennt/{folder}/{element}")
-    #
-    #         if files_list.index(element) % 10 == 0 and files_list.index(element) != 0:
-    #             print(f"progress: {files_list.index(element)} von {len(files_list)}")
-    #
-    #         settings = EfficientFCParameters()
-    #
-    #         features = tsfresh.extract_features(data, column_id="id", default_fc_parameters=settings)
-    #
-    #         # features = []
-    #         # data = pd.DataFrame.to_numpy(data)
-    #         # print(type(tsfresh.feature_extraction.feature_calculators.autocorrelation(data, 3)))
-    #
-    #         if element == files_list[0]:  # beim ersten durchgang soll die variable erstellt werden
-    #             all_features = features
-    #         else:  # und nach ersten durchlauf nur noch erweitern der matrix
-    #             all_features = pd.concat([all_features, features], axis=0)
-    #         all_features["id_KI"] = folders.index(folder)  # 0: gummi, 1: metall, 2:plastik, 3: stift
-    #
-    #     print(all_features)
-    #
-    #     # speichern des feature dataframes als csv
-    #     all_features.to_csv(f"{folder}.csv", index=False)
-    #
-    #     time_2 = datetime.datetime.now().replace(microsecond=0)
-    #
-    #     print(f"total time: {time_2 - time_1}")
+    folders = ["gummi", "metall", "plastik", "stift"]
 
-    extract_features_from_file('Aufnahmen getrennt/gummi/gummi1_1.txt')
+    y_list = []
+
+    for folder in folders:
+        print(folder)
+        time_1 = datetime.datetime.now().replace(microsecond=0)
+        # dateien im ordner holen
+        files_list = give_files_in_dir(f"Aufnahmen getrennt/{folder}")
+        # durch jede file im ordner gehen
+        all_features = pd.DataFrame()
+        for element in files_list:
+            data = read_data_from_file(f"Aufnahmen getrennt/{folder}/{element}")
+
+            if files_list.index(element) % 10 == 0 and files_list.index(element) != 0:
+                print(f"progress: {files_list.index(element)} von {len(files_list)}")
+
+            settings = EfficientFCParameters()
+
+            features = extract_20_custom_features(data)
+
+            # features = []
+            # data = pd.DataFrame.to_numpy(data)
+            # print(type(tsfresh.feature_extraction.feature_calculators.autocorrelation(data, 3)))
+
+            if element == files_list[0]:  # beim ersten durchgang soll die variable erstellt werden
+                all_features = features
+            else:  # und nach ersten durchlauf nur noch erweitern der matrix
+                all_features = pd.concat([all_features, features], axis=0)
+            all_features["id_KI"] = folders.index(folder)  # 0: gummi, 1: metall, 2:plastik, 3: stift
+
+        print(all_features)
+
+        # speichern des feature dataframes als csv
+        all_features.to_csv(f"{folder}.csv", index=False)
+
+        time_2 = datetime.datetime.now().replace(microsecond=0)
+
+        print(f"total time: {time_2 - time_1}")
+
+    # extract_features_from_file('Aufnahmen getrennt/gummi/gummi1_1.txt')
+
+    # extract_10_custom_features('Aufnahmen getrennt/gummi/gummi1_1.txt')

@@ -1,7 +1,19 @@
-total time: 3:12:58
+Zeiten alle features:
+    total time: 3:12:58
+    total time: 2:24:41
+    total time: 2:42:48
+    total time: 1:04:12
 
-total time: 2:24:41
+Zeiten 10 features:
+    total time: 0:14:37
+    total time: 0:13:56
+    total time: 0:13:27
+    total time: 0:08:14
 
-total time: 2:42:48
+Zeiten 20 features:
+    total time: 0:14:38
+    total time: 0:15:04
+    total time: 0:14:59
+    total time: 0:08:30
 
-total time: 1:04:12
+

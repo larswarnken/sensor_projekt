@@ -1,0 +1,11 @@
+feature,feature,type,p_value,relevant
+data__fourier_entropy__bins_10,data__fourier_entropy__bins_10,real,1.4940387369122295e-68,True
+data__fourier_entropy__bins_100,data__fourier_entropy__bins_100,real,3.065528420586677e-68,True
+data__fourier_entropy__bins_5,data__fourier_entropy__bins_5,real,3.7621853700631845e-68,True
+data__ratio_beyond_r_sigma__r_10,data__ratio_beyond_r_sigma__r_10,real,4.3983090275750584e-68,True
+"data__agg_linear_trend__attr_""rvalue""__chunk_len_10__f_agg_""min""","data__agg_linear_trend__attr_""rvalue""__chunk_len_10__f_agg_""min""",real,4.87328212673515e-68,True
+data__kurtosis,data__kurtosis,real,4.87328212673515e-68,True
+data__partial_autocorrelation__lag_1,data__partial_autocorrelation__lag_1,real,4.87328212673515e-68,True
+data__cid_ce__normalize_True,data__cid_ce__normalize_True,real,4.87328212673515e-68,True
+"data__agg_linear_trend__attr_""rvalue""__chunk_len_5__f_agg_""max""","data__agg_linear_trend__attr_""rvalue""__chunk_len_5__f_agg_""max""",real,4.87328212673515e-68,True
+"data__agg_autocorrelation__f_agg_""mean""__maxlag_40","data__agg_autocorrelation__f_agg_""mean""__maxlag_40",real,4.87328212673515e-68,True
