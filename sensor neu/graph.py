@@ -26,9 +26,9 @@ def plot_time(figure_plots, canvas_plots, data=None):
         subplot.set_xlim(0, 10)
         subplot.set_ylim(-1, 1)
     else:
-        sample_rate = reading_data.get_loaded_sample_rate()
-        time = reading_data.get_loaded_record_time()
-
+        # sample_rate = reading_data.get_loaded_sample_rate()
+        # time = reading_data.get_loaded_record_time()
+        #
         # labels = [item.get_text() for item in subplot.get_xticklabels()]
         #
         # print(labels)

@@ -17,6 +17,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as pyplot
 import pickle
 from matplotlib import style
+from sklearn.preprocessing import StandardScaler
 
 
 # ---------------------------------------------
@@ -43,24 +44,17 @@ selected_features = tsfresh.select_features
 
     ausgabe.configure(text=message)'''
 
-#def data_laden():
-
+#
+# def find_features(features_list, df):
+#     df.drop(columns= features_list)
+#     return df
 
 
 def result(methode, crossvalidation, repeat_n_times, testsize):
-    X2 = pd.read_csv("combined.csv")  # pandas dataframe
+    X2 = pd.read_csv("combined_10_features.csv")  # pandas dataframe
     data = X2.dropna(axis=1)
-    selected_features = tsfresh.select_features(data, data["id_KI"])
+    data.drop('id_KI',axis=1, inplace=True)
 
-    data_features = selected_features.iloc[:, 3:10]  # feature spalten 3 bis 10
-    data_target = data["id_KI"].to_numpy()
-
-    '''pd.plotting.scatter_matrix(data_features,
-                               c=data_target,
-                               figsize=(8, 8)
-                               )
-
-    plt.show()'''
 
     # classes
     y2 = X2.iloc[:, -1:]
@@ -70,27 +64,25 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
         y3.append(element[0])
     y3 = np.array(y3)
 
-    # ki_id_column = len(X2.columns) - 1
-    # data = X2.iloc[:, :]  # X2.iloc[:, [1, 2, 3, ki_id_column]]
+    print("Merkmale:")
+    print(data.columns.values)
 
-    # time_1 = datetime.datetime.now().replace(microsecond=0)
-    selected_features = selected_features.iloc[:, :20]  # Nicht alle Merkmale benutzen
+    relevant_features = list(data.columns)
 
-    # trains and tests ai n times, calculates average accuracy
-    # repeat_n_times = 10
 
     print("crossvalidation:", crossvalidation)
     results = []
     bac_list = []
-    # trains and tests ai n times, calculates average accuracy
+
     global pp
 
-    if(crossvalidation == "True"):
+    if (crossvalidation == "True"):
         print("repeat n times:", repeat_n_times)
+        print("split in n folds:", (int)(1 / testsize))
         for i in range(repeat_n_times):
-            selected_features = np.array(selected_features)
-            X, y = selected_features, y3
-            kf = KFold(n_splits=10, shuffle=True)
+            data = np.array(data)
+            X, y = data, y3
+            kf = KFold(n_splits=(int)(1 / testsize), shuffle=True)
             kf.get_n_splits(X)
             print(kf)
             pp = PdfPages("decision_trees_crossvalidation.pdf")
@@ -99,6 +91,7 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
                 X_train, X_test = X[train_index], X[test_index]
                 y_train, y_test = y[train_index], y[test_index]
                 if (methode == "neural_network"):
+                    X_train, X_test = scale_data(X_train, X_test)
                     score = neural_network(X_train, X_test, y_train, y_test, bac_list)
                 if (methode == "decision_tree"):
                     score = decision_tree(X_train, X_test, y_train, y_test, num_x, bac_list)
@@ -113,15 +106,11 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
         for i in range(repeat_n_times):
             # training
 
-            X_train, X_test, y_train, y_test = train_test_split(selected_features, y3, test_size=testsize, shuffle=True)
-
-            #print(X_test)
-            #dient dazu Klassifikator zu testen
-            global test_data
-            test_data = X_test
+            X_train, X_test, y_train, y_test = train_test_split(data, y3, test_size=testsize, shuffle=True)
 
 
             if (methode == "neural_network"):
+                X_train, X_test = scale_data(X_train, X_test)
                 score = neural_network(X_train, X_test, y_train, y_test, bac_list)
             if (methode == "decision_tree"):
                 # save multiple decision trees plots in one file
@@ -133,29 +122,23 @@ def result(methode, crossvalidation, repeat_n_times, testsize):
     bac =  sum(bac_list) / len(bac_list)
     return result * 100, bac*100
 
-def get_test_data():
-    return test_data
+# def get_test_data():
+#     return test_data
 
 # kombiniert alle cvs files zu einer, brauchen wir eigentlich nicht mehr
-def get_x_data():
-    gummi_dataframe = pd.read_csv("gummi.csv")
-    metall_dataframe = pd.read_csv("metall.csv")
-    plastik_dataframe = pd.read_csv("plastik.csv")
-    stift_dataframe = pd.read_csv("stift.csv")
-
-    combined_data = gummi_dataframe.append(metall_dataframe, ignore_index=True)
-    combined_data = combined_data.append(plastik_dataframe, ignore_index=True)
-    combined_data = combined_data.append(stift_dataframe, ignore_index=True)
-
-    combined_data.to_csv(f"combined.csv", index=False)
-
-    return combined_data
-
-
-'''def data_training(X, y):  # split dataset to train model und test it
-    print("testsize:", testsize)
-    return train_test_split(selected_features, y3, test_size=testsize, shuffle=True)'''
-
+# def get_x_data():
+#     gummi_dataframe = pd.read_csv("gummi.csv")
+#     metall_dataframe = pd.read_csv("metall.csv")
+#     plastik_dataframe = pd.read_csv("plastik.csv")
+#     stift_dataframe = pd.read_csv("stift.csv")
+#
+#     combined_data = gummi_dataframe.append(metall_dataframe, ignore_index=True)
+#     combined_data = combined_data.append(plastik_dataframe, ignore_index=True)
+#     combined_data = combined_data.append(stift_dataframe, ignore_index=True)
+#
+#     combined_data.to_csv(f"combined.csv", index=False)
+#
+#     return combined_data
 
 # ---------------------------------------------
 def neural_network(X_train, X_test, y_train, y_test, bac_list):
@@ -212,26 +195,6 @@ def decision_tree(X_train, X_test, y_train, y_test, num_x, bac_list):
 
     return score1
 
-# Klasssifikator speichern
-'''def save_model(ml_model):
-    # Save Model Using Pickle
-    #with open("")
-    model = ml_model
-    # save the model to disk
-
-    filename = 'finalized_model.sav' # todo spezifische filename
-    pickle.dump(model, open(filename, 'wb'))'''
-
-
-'''def get_score(y_pred, y_test):
-    score = 0
-    for i in range(len(y_pred)):
-        if y_pred[i] == y_test[i]:
-            score += 1
-    score = score / len(y_pred)
-
-    return score'''
-
 
 def balanced_accuracy(y_pred, y_test):
     score_classes = np.zeros(len(classes))  # zeros is a null vektor
@@ -244,25 +207,58 @@ def balanced_accuracy(y_pred, y_test):
                 class_no[j] += 1  # zählen welche Klasse wie oft in ytest vorliegt
     for j in range(len(classes)):
         score_classes[j] = score_classes[j] / class_no[j]  # accuracy für jede Klasse separat berechnen
+        print("Klass-",j,":",score_classes[j])
     bac = np.mean(score_classes)  # balanced accuracy
 
     return bac
 
 # gespeicherte Klassifikator aufrufen
 def load_classifier(modul_name):
+    global is_neural_network
+    if modul_name == 'C:/Users/shenj/Desktop/SystemProjekt/aktuell/10 Features Version/neural_network_model.pickle':
+        is_neural_network  = True
+    else:
+        is_neural_network = False
     pickle_in = open(modul_name, "rb") # z.B. pickle_in = open("decision_tree_model.pickle", "rb")
+    print(pickle_in)
     clf = pickle.load(pickle_in)
+    print("is_neural_network:", is_neural_network)
     return clf
 
+# todo für MLP Skalieren
 # einzeln Aufnahme vorhersagen, data_list-> eindemensionaler Vektor: Merkmale list für die zu vorhersagende Aufnahme
-def predict_single_data(modul, data_list):
+def predict_single_data(modul):
     clf = modul
-    prediction_index = clf.predict(data_list)[3]
+    data_list = get_data_list_one_recording()
+    if is_neural_network == True:
+        data_list = scale_data_predict(data_list)
+        print("data_list_scale:", data_list)
+    prediction_index = clf.predict(data_list)[0]
+    #print(clf.predict(data_list))
+    print(prediction_index)
     print(material_class[prediction_index])
     return material_class[prediction_index]
 
+# data skalieren
+def scale_data(X_train, X_test):
+
+    global scaler
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+    return X_train, X_test
+
+def scale_data_predict(X):
+
+    X = scaler.transform(X)
+    return X
 
 
-# progress_value = round(i / repeat_n_times * 10)
-# sys.stdout.write("\rprogress |{0}{1}|".format("=" * progress_value, " " * (10 - progress_value)))
-# sys.stdout.flush()
+def get_data_list_one_recording():
+    X2 = pd.read_csv("features.csv")  # pandas dataframe
+    data = X2.dropna(axis=1)
+    print(data.columns.values)
+    data = np.array(data)
+    return data
+
