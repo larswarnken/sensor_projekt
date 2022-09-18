@@ -47,6 +47,7 @@ def read_data(path):
 def detect_hit():
     global loaded_data
     global loaded_sample_rate
+    global loaded_record_time
 
     if len(loaded_data) > 0:
 
@@ -69,6 +70,7 @@ def detect_hit():
                     print('length cut data: ', len(cut_data))
 
                     loaded_data = cut_data
+                    loaded_record_time = 1.5
 
                     hit_found = True
 
